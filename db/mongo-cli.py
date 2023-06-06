@@ -10,7 +10,7 @@ import json
 import click
 from connect import connection
 from constants import DATABASE, QUERY_RESULT, TWEET_DATE_FIELDS
-from query import count_documents, find_documents
+from query import count_documents, find_documents, search_text
 
 
 @click.group()
@@ -49,6 +49,17 @@ def find(ctx, field, value):
     generator = find_documents(collection=collection, query=query)
     matches = [match for match in generator]
     print(f"{len(matches)} documents matched the query {query}.")
+    write_output(data=matches)
+
+
+@cli.command()
+@click.argument("keyword")
+@click.pass_context
+def search(ctx, keyword):
+    collection = ctx.obj["collection"]
+    generator = search_text(collection=collection, keyword=keyword)
+    matches = [match for match in generator]
+    print(f"{len(matches)} documents matched the token {keyword}.")
     write_output(data=matches)
 
 
