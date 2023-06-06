@@ -58,15 +58,72 @@ Additional parameters:
 - `--field` : the field in which you will search for matches
 - `--condition` : the value or condition on which you want to match
 
-For example, in the tweets collection, if you want to search for all text tokens that were analyzed to be a location ("LOC"), you would search for "LOC" (`--condition "LOC"`) within the field "tag" in a tweet document's array "annotations" (`--field "annotations.tag"`).
-
-```shell
-find --field "annotations.tag" --condition "LOC"
-```
-
-In MQL syntax, this query would be written like this: `{"annotations.tag" : "LOC"}`.
-
 The output of all searches is written to a JSON file called `query-output.json`.
+
+Examples
+
+<table>
+   <tr>
+      <th>Research question</th>
+      <th><code>--field</code></th>
+      <th><code>--value</code></th>
+      <th>Query in MongoDB syntax</th>
+      <th colspan=4>Example matches</th>
+   </tr>
+   <tr>
+      <th colspan=4></th>
+      <th>Tweet text</th>
+      <th>NER results</th>
+      <th>Tweet text</th>
+      <th>NER results</th>
+   </tr>
+   <tr>
+      <td>What tweets have locations in the text?</td>
+      <td><code>'annotations.tag'</code></td>
+      <td><code>'LOC'</code></td>
+      <td><code>{"annotation.tag" : "LOC"}</code></td>
+      <td>ChatGPT BOT on "Is cannabis legal in Italy and Israel" https://...</td>
+      <td>
+      Annotation:<br/>
+         <code>"tag":"LOC",</code><br/>
+         <code>"text":"Italy",</code><br/>
+         <code>"score":0.9999960660934448,</code><br/>
+         <code>"start_position":37,</code><br/>
+         <code>"end_position":42</code><br/>
+      </td>
+      <td>"- This is a big innovation in the Metaverse industry, you can just walk up and ask the #AI #ChatGPT ​​any question.<br/><br/>@Enter_Realm reform Metaverse! « Enter_Realm: The future is here!<br/><br/>#AI is taking over Realm's Metaverse!...</td>
+      <td>
+      Annotation:<br/>
+         <code>"tag":"LOC",</code><br/>
+         <code>"text":"Metaverse",</code><br/>
+         <code>"score":0.6627128720283508,</code><br/>
+         <code>"start_position":393,</code><br/>
+         <code>"end_position":402</code><br/>
+      </td>
+   </tr>
+   <tr>
+      <td>What tweets have the words "fake", "misinformation" or "disinformation" in the text?</td>
+      <td><code>'tokens.token'</code></td>
+      <td><code>'{ "$in": ["fake", "misinformation", "disinformation"]}'</code></td>
+      <td><code>{"tokens.token" : { $in: ["fake", "misinformation", "disinformation"] } }</code></td>
+      <td>ChatGPT - What people think it looks like vs. reality<br/>So much #AI hype & misinformation around these days.<br/><br/>I'm a strong proponent of using AI technology in healthcare, but we must approach its use responsibly, with an emphasis on:<br/><br/>High quality data & Real-world applications</td>
+      <td>
+      Token:<br/>
+         <code>"index":16,</code><br/>
+         <code>"token":"misinformation",</code><br/>
+         <code>"start_position":72,</code><br/>
+         <code>"end_position":86</code><br/>
+      </td>
+      <td>I have 5 numbers of contacts on my phone two are Businesses.<br/>None are family.<br/>Pictures and emails and profile pictures are super easy to fake. Chatgpt or whatever is going to make things so much more complicated.  Even if its from the genuine person. You can not trust it.</td>
+      <td>
+      Token:<br/>
+      <code>"index":28,</code><br/>
+      <code>"token":"fake",</code><br/>
+      <code>"start_position":137,</code><br/>
+      <code>"end_position":141</code><br/>
+      </td>
+   </tr>
+</table>
 
 ## Annotate Data
 
@@ -75,6 +132,6 @@ Collected tweets' texts were annotated with Named-Entity-Recognition (NER) tags.
 1. Clean the Tweet metadata (dates, arrays, etc.).
 1. Clean the Tweet's text by removing the # at the start of a hashtag as well as Twitter usernames and URLs.
 1. Predict the text's NER tags using [Flair's](https://github.com/flairNLP/flair) `ner-large` tokenizer and NER models.
-1. Format in JSON and write the predicts to a file.
+1. Format in JSON and write the predictions to a file.
 
 The file produced by the steps above was then inserted into a MongoDB database using [this script](db/build.py).

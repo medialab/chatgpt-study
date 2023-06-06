@@ -4,6 +4,7 @@
 #
 # Click CLI commands to interact with collection in MongoDB database.
 #
+import ast
 import json
 
 import click
@@ -35,11 +36,16 @@ def count(ctx):
 
 @cli.command()
 @click.option("--field")
-@click.option("--condition")
+@click.option("--value")
 @click.pass_context
-def find(ctx, field, condition):
+def find(ctx, field, value):
     collection = ctx.obj["collection"]
-    query = {field: condition}
+    try:
+        value = ast.literal_eval(value)
+    except:
+        value = value
+    print(f"Parsed the value as {type(value)}")
+    query = {field: value}
     generator = find_documents(collection=collection, query=query)
     matches = [match for match in generator]
     print(f"{len(matches)} documents matched the query {query}.")
