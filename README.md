@@ -50,13 +50,13 @@ No additional parameters.
 #### Search documents (`find`)
 
 ```shell
-python db/mongo-cli.py --username YOUR_USERNAME --password YOUR_PASSWORD --collection COLLECTION_NAME find --field FIELD --condition CONDITION
+python db/mongo-cli.py --username YOUR_USERNAME --password YOUR_PASSWORD --collection COLLECTION_NAME find --field FIELD --value VALUE
 ```
 
 Additional parameters:
 
 - `--field` : the field in which you will search for matches
-- `--condition` : the value or condition on which you want to match
+- `--value` : the value or condition on which you want to match
 
 The output of all searches is written to a JSON file called `query-output.json`.
 
