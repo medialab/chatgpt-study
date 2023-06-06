@@ -1,5 +1,16 @@
 # ChatGPT Study
 
+## Description
+
+This repository contains some tools to annotate and query data collected for a study on discourses around ChatGPT and AI.
+
+### Table of contents
+
+- [How to query annotated data](#access-data)
+  - [Set up access](#prepare-access-to-the-database)
+  - [Query data](#query-the-database)
+- [How to annotate data](#annotate-data)
+
 ## Access Data
 
 The data is stored in a MongoDB Atlas database cluster. MongoDB was chosen because it is a document database and most queries will concern metadata associated with unique documents, specifically tweets.
