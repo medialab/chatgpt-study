@@ -25,6 +25,13 @@ casa map 'index % 12 + 1' partition english_999-_friends_chunk2_after_230209.csv
 xsv partition partition ready --drop --filename 'english_999-_friends_chunk1_before_230209_part_{}.csv' english_999-_friends_chunk1_before_230209_+12partitions.csv
 xsv partition partition ready --drop --filename 'english_999-_friends_chunk2_after_230209_part_{}.csv' english_999-_friends_chunk2_after_230209_+12partitions.csv
 
+# Resplit chunks 3,8,12 leftovers
+xsv cat rows english_999-_friends_chunk1_before_230209_part_3_leftover.csv english_999-_friends_chunk1_before_230209_part_8_leftover.csv english_999-_friends_chunk1_before_230209_part_12_leftover.csv > english_999-_friends_chunk1_before_230209_part_3-8-12_leftover.csv
+casa map 'index % 9 + 1' partition english_999-_friends_chunk1_before_230209_part_3-8-12_leftover.csv > english_999-_friends_chunk1_before_230209_part_3-8-12_leftover_+9partitions.csv
+xsv partition partition ready --drop --filename 'english_999-_friends_chunk1_before_230209_part_3-8-12_leftover_{}.csv' english_999-_friends_chunk1_before_230209_part_3-8-12_leftover_+9partitions.csv
+
+
+
 
 # Use casanova to add a nb_queries column in english1000+ files
 casa map 'math.floor(int(row.user_friends) / 5000) + 1' nb_queries english_1000+_friends_chunk1_before_230209.csv > english_1000+_friends_chunk1_before_230209_+nbqueries.csv
