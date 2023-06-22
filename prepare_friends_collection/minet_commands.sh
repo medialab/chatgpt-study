@@ -98,8 +98,10 @@ minet twitter friends --rcfile v2_key_zeynep.yml --ids --v2 -i english_999-_frie
 
 # ENGLISH chunk 2
 
-## Less than 999 friends (12 v2 keys)
-
 
 ## More than 1000 friends (11 v1 keys)
+
+## Less than 999 friends PART 1 (9 v2 keys)
+
+## Less than 999 friends PART 2 (9 v2 keys + 11 v1 keys)
 
