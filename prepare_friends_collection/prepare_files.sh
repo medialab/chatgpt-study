@@ -27,8 +27,8 @@ xsv partition partition ready --drop --filename 'english_999-_friends_chunk2_aft
 
 # Resplit chunks 3,8,12 leftovers
 xsv cat rows english_999-_friends_chunk1_before_230209_part_3_leftover.csv english_999-_friends_chunk1_before_230209_part_8_leftover.csv english_999-_friends_chunk1_before_230209_part_12_leftover.csv > english_999-_friends_chunk1_before_230209_part_3-8-12_leftover.csv
-casa map 'index % 9 + 1' partition english_999-_friends_chunk1_before_230209_part_3-8-12_leftover.csv > english_999-_friends_chunk1_before_230209_part_3-8-12_leftover_+9partitions.csv
-xsv partition partition ready --drop --filename 'english_999-_friends_chunk1_before_230209_part_3-8-12_leftover_{}.csv' english_999-_friends_chunk1_before_230209_part_3-8-12_leftover_+9partitions.csv
+casa map 'index % 20 + 1' partition english_999-_friends_chunk1_before_230209_part_3-8-12_leftover.csv > english_999-_friends_chunk1_before_230209_part_3-8-12_leftover_+20partitions.csv
+xsv partition partition ready --drop --filename 'english_999-_friends_chunk1_before_230209_part_3-8-12_leftover_{}.csv' english_999-_friends_chunk1_before_230209_part_3-8-12_leftover_+20partitions.csv
 
 
 
