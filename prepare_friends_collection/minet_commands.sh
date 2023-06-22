@@ -68,7 +68,7 @@ minet twitter friends --rcfile v1_key_valentine.yml --ids -i english_1000+_frien
 
 
 
-## Leftover less than 999 after 3 dead keys (9 v2 keys + 11 v1 keys)
+## Leftover less than 999 after 3 dead keys (9 v2 keys + 11 v1 keys) (~= 28H)
 
 
 minet twitter friends --rcfile v1_key_fautarreter.yml --ids -i english_999-_friends_chunk1_before_230209_part_3-8-12_leftover_1.csv --total $(xsv count english_999-_friends_chunk1_before_230209_part_3-8-12_leftover_1.csv) -o english_999-_friends_chunk1_before_230209_part_3-8-12_leftover_1_results.csv user_id 
@@ -99,9 +99,14 @@ minet twitter friends --rcfile v2_key_zeynep.yml --ids --v2 -i english_999-_frie
 # ENGLISH chunk 2
 
 
-## More than 1000 friends (11 v1 keys)
+## More than 1000 friends (11 v1 keys)  (~= 113H)
 
-## Less than 999 friends PART 1 (9 v2 keys)
+## Less than 999 friends PART 1 (9 v2 keys)  (~= 113H)
 
-## Less than 999 friends PART 2 (9 v2 keys + 11 v1 keys)
+
+
+## Less than 999 friends PART 2 (9 v2 keys + 11 v1 keys)  (~= 145H)
+
+
+
 
