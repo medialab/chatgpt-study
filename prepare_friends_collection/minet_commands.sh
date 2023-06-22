@@ -110,3 +110,19 @@ minet twitter friends --rcfile v2_key_zeynep.yml --ids --v2 -i english_999-_frie
 
 
 
+
+# BIOS
+
+## German + French (with 9 v1 keys)
+
+
+minet twitter users user_id --rcfile v1_key_fautarreter.yml --ids -s '' -i german+french_unique_userids_part_1.csv --total $(xsv count german+french_unique_userids_part_1.csv) -o german+french_unique_userids_part_1_bios.csv
+minet twitter users user_id --rcfile v1_key_gazoumedialab.yml --ids -s '' -i german+french_unique_userids_part_2.csv --total $(xsv count german+french_unique_userids_part_2.csv) -o german+french_unique_userids_part_2_bios.csv
+minet twitter users user_id --rcfile v1_key_jules.yml --ids -s '' -i german+french_unique_userids_part_3.csv --total $(xsv count german+french_unique_userids_part_3.csv) -o german+french_unique_userids_part_3_bios.csv
+minet twitter users user_id --rcfile v1_key_kotras.yml --ids -s '' -i german+french_unique_userids_part_4.csv --total $(xsv count german+french_unique_userids_part_4.csv) -o german+french_unique_userids_part_4_bios.csv
+minet twitter users user_id --rcfile v1_key_medialab.yml --ids -s '' -i german+french_unique_userids_part_5.csv --total $(xsv count german+french_unique_userids_part_5.csv) -o german+french_unique_userids_part_5_bios.csv
+minet twitter users user_id --rcfile v1_key_pantoufleurs.yml --ids -s '' -i german+french_unique_userids_part_6.csv --total $(xsv count german+french_unique_userids_part_6.csv) -o german+french_unique_userids_part_6_bios.csv
+minet twitter users user_id --rcfile v1_key_paulanomalie.yml --ids -s '' -i german+french_unique_userids_part_7.csv --total $(xsv count german+french_unique_userids_part_7.csv) -o german+french_unique_userids_part_7_bios.csv
+minet twitter users user_id --rcfile v1_key_pauline.yml --ids -s '' -i german+french_unique_userids_part_8.csv --total $(xsv count german+french_unique_userids_part_8.csv) -o german+french_unique_userids_part_8_bios.csv
+minet twitter users user_id --rcfile v1_key_pspj.yml --ids -s '' -i german+french_unique_userids_part_9.csv --total $(xsv count german+french_unique_userids_part_9.csv) -o german+french_unique_userids_part_9_bios.csv
+
