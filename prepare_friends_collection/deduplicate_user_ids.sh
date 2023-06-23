@@ -63,31 +63,53 @@ ls english_1000+_friends_chunk1_before_230209_part_*results.csv.gz | while read 
 done
 cat english_1000+_friends_chunk1_before_230209_part_*results.csv.gz.unique_userids | sort -u > english_1000+_friends_chunk1_before_230209_parts_results.csv.gz.unique_userids
 
-echo "user_id" > english_chunk1_1000+_unique_userids.csv
-cat english_1000+_friends_chunk1_before_230209_parts.csv.unique_userids english_1000+_friends_chunk1_before_230209_parts_results.csv.gz.unique_userids | sort -u >> english_chunk1_1000+_unique_userids.csv
+echo "user_id" > ../english_chunk1_1000+_unique_userids.csv
+cat english_1000+_friends_chunk1_before_230209_parts.csv.unique_userids english_1000+_friends_chunk1_before_230209_parts_results.csv.gz.unique_userids | sort -u >> ../english_chunk1_1000+_unique_userids.csv
+gzip ../english_chunk1_1000+_unique_userids.csv
 rm -f *.unique_userids
 cd ../../..
 
 
-gzip english_chunk1/more_1000/complete/english_chunk1_1000+_unique_userids.csv
-
-
-
 # ENGLISH CHUNK 1 999-
 
-ls english_chunk1/more_1000/complete/english_1000+_friends_chunk1_before_230209_part_?.csv | while read SOURCE_FILE; do
+cd english_chunk1/less_999/complete
+ls english_999-_friends_chunk1_before_230209_part_?.csv english_999-_friends_chunk1_before_230209_part_??.csv | while read SOURCE_FILE; do
   xsv select user_id $SOURCE_FILE | xsv behead | sort -u > $SOURCE_FILE.unique_userids
 done
-cat english_chunk1/more_1000/complete/english_1000+_friends_chunk1_before_230209_part_?.csv.unique_userids | sort -u > english_chunk1/more_1000/complete/english_1000+_friends_chunk1_before_230209_parts.csv.unique_userids
+cat english_999-_friends_chunk1_before_230209_part_?.csv.unique_userids english_999-_friends_chunk1_before_230209_part_??.csv.unique_userids | sort -u > english_999-_friends_chunk1_before_230209_parts.csv.unique_userids
 
-ls english_chunk1/more_1000/complete/english_1000+_friends_chunk1_before_230209_part_*results.csv.gz | while read RESULT_FILE; do
+ls english_999-_friends_chunk1_before_230209_part_*results.csv.gz | while read RESULT_FILE; do
   zcat $RESULT_FILE | xsv select friend_id | xsv behead | sort -u > $RESULT_FILE.unique_userids
 done
-cat english_chunk1/more_1000/complete/english_1000+_friends_chunk1_before_230209_part_*results.csv.gz.unique_userids | sort -u > english_chunk1/more_1000/complete/english_1000+_friends_chunk1_before_230209_parts_results.csv.gz.unique_userids
+cat english_999-_friends_chunk1_before_230209_part_*results.csv.gz.unique_userids | sort -u > english_999-_friends_chunk1_before_230209_parts_results.csv.gz.unique_userids
 
-echo "user_id" > english_chunk1/more_1000/complete/english_chunk1_1000+_unique_userids.csv
-cat english_chunk1/more_1000/complete/english_1000+_friends_chunk1_before_230209_parts.csv.unique_userids english_chunk1/more_1000/complete/english_1000+_friends_chunk1_before_230209_parts_results.csv.gz.unique_userids | sort -u >> english_chunk1/more_1000/complete/english_chunk1_1000+_unique_userids.csv
-gzip english_chunk1/more_1000/complete/english_chunk1_1000+_unique_userids.csv
-rm -f english_chunk1/more_1000/complete/*.unique_userids
+echo "user_id" > ../english_chunk1_999-_unique_userids.csv
+cat english_999-_friends_chunk1_before_230209_parts.csv.unique_userids english_999-_friends_chunk1_before_230209_parts_results.csv.gz.unique_userids | sort -u >> ../english_chunk1_999-_unique_userids.csv
 
+rm -f *.unique_userids
+cd ../../..
+
+# ASSEMBLE + ZIP
+
+cd english_chunk1
+echo "user_id" > english_chunk1_before_230209_unique_userids.csv
+cat more_1000/english_chunk1_1000+_unique_userids.csv less_999/english_chunk1_999-_unique_userids.csv | grep -v "^user_id" | sort -u >> english_chunk1_before_230209_unique_userids.csv
+
+gzip more_1000/english_chunk1_1000+_unique_userids.csv
+gzip less_999/english_chunk1_999-_unique_userids.csv
+
+casa map 'index % 11 + 1' partition english_chunk1_before_230209_unique_userids.csv > english_chunk1_before_230209_unique_userids_+11partitions.csv
+cd ..
+xsv partition partition bios --drop --filename 'english_chunk1_before_230209_unique_userids_part_{}.csv' english_chunk1/english_chunk1_before_230209_unique_userids_+11partitions.csv
+
+
+
+
+# ENGLISH CHUNK 2 1000+
+
+
+# ENGLISH CHUNK 2-1 999-
+
+
+# ENGLISH CHUNK 2-2 999-
 
