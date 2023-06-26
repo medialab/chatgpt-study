@@ -110,6 +110,20 @@ xsv partition partition bios --drop --filename 'english_chunk1_before_230209_uni
 
 # ENGLISH CHUNK 2-1 999-
 
+cd english_chunk2/less_999-part1
+
+xsv select user_id complete/english_999-_friends_chunk2-1_after_230209_cut.csv | xsv behead | sort -u > english_999-_friends_chunk2-1_after_230209_cut.csv.unique_userids
+
+zcat english_999-_friends_chunk2-1_after_230209_cut_results.csv.gz | xsv select friend_id | xsv behead | sort -u > english_999-_friends_chunk2-1_after_230209_cut_results.csv.unique_userids
+
+echo "user_id" > english_999-_friends_chunk2-1_after_230209_cut_unique_userids.csv
+cat english_999-_friends_chunk2-1_after_230209_cut.csv.unique_userids english_999-_friends_chunk2-1_after_230209_cut_results.csv.unique_userids | sort -u >> english_999-_friends_chunk2-1_after_230209_cut_unique_userids.csv
+
+rm -f *.unique_userids
+cd ../..
+
+
+
 
 # ENGLISH CHUNK 2-2 999-
 
