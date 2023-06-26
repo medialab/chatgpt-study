@@ -73,5 +73,18 @@ xsv partition partition ready --drop --filename 'english_999-_friends_chunk2-1_a
 casa map 'index % 20 + 1' partition english_999-_friends_chunk2-2_after_230209.csv > english_999-_friends_chunk2-2_after_230209_+20partitions.csv
 xsv partition partition ready --drop --filename 'english_999-_friends_chunk2-2_after_230209_part_{}.csv' english_999-_friends_chunk2-2_after_230209_+20partitions.csv
 
+# Chunk2-1 stopped in the middle due to all dead v2 keys, so extracting done and reassembling leftover with chunk2-2 into chunk2-leftover1+2
+
+head -1 english_999-_friends_chunk2-1_after_230209.csv > english_999-_friends_chunk2-1_after_230209_sort.csv
+xsv behead english_999-_friends_chunk2-1_after_230209.csv | sort >> english_999-_friends_chunk2-1_after_230209_sort.csv
+head -1 english_999-_friends_chunk2-1_after_230209.csv > english_999-_friends_chunk2-1_after_230209_leftover.csv
+diff english_999-_friends_chunk2-1_after_230209_sort.csv english_999-_friends_chunk2-1_after_230209_cut.csv | grep '<' | sed 's/^< //' >> english_999-_friends_chunk2-1_after_230209_leftover.csv
+
+xsv cat rows english_999-_friends_chunk2-1_after_230209_leftover.csv english_999-_friends_chunk2-2_after_230209.csv | xsv sort -s local_time > english_999-_friends_chunk2-leftover1+2_after_230209.csv
+
+# Use casanova to add a partition column in 999- files for chunk2-leftover1+2 (for 11 v1 keys)
+casa map 'index % 11 + 1' partition english_999-_friends_chunk2-leftover1+2_after_230209.csv > english_999-_friends_chunk2-leftover1+2_after_230209_+11partitions.csv
+xsv partition partition ready --drop --filename 'english_999-_friends_chunk2-leftover1+2_after_230209_part_{}.csv' english_999-_friends_chunk2-leftover1+2_after_230209_+11partitions.csv
+
 
 
