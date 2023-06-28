@@ -119,10 +119,10 @@ gzip *results.csv
 ls english_1000+_friends_chunk2_after_230209_part_*results.csv.gz | while read RESULT_FILE; do
   zcat $RESULT_FILE | xsv select friend_id | xsv behead | sort -u > $RESULT_FILE.unique_userids
 done
-cat english_1000+_friends_chunk2_after_230209_part_*results.csv.gz.unique_userids | sort -u > english_1000+_friends_chunk2_after_230209_parts_results.csv.gz.unique_userids
+cat english_1000+_friends_chunk2_after_230209_part_*results.csv.gz.unique_userids | sort -u -T tmpsort > english_1000+_friends_chunk2_after_230209_parts_results.csv.gz.unique_userids
 
 echo "user_id" > ../english_chunk2_1000+_unique_userids.csv
-cat english_1000+_friends_chunk2_after_230209_parts.csv.unique_userids english_1000+_friends_chunk2_after_230209_parts_results.csv.gz.unique_userids | sort -u >> ../english_chunk2_1000+_unique_userids.csv
+cat english_1000+_friends_chunk2_after_230209_parts.csv.unique_userids english_1000+_friends_chunk2_after_230209_parts_results.csv.gz.unique_userids | sort -u -T tmpsort >> ../english_chunk2_1000+_unique_userids.csv
 gzip ../english_chunk2_1000+_unique_userids.csv
 
 rm -f *.unique_userids
