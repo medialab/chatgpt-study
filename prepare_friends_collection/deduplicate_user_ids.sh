@@ -107,6 +107,27 @@ xsv partition partition bios --drop --filename 'english_chunk1_before_230209_uni
 
 # ENGLISH CHUNK 2 1000+
 
+cd english_chunk2/more_1000
+
+ls english_1000+_friends_chunk2_after_230209_part_?.csv english_1000+_friends_chunk2_after_230209_part_??.csv | while read SOURCE_FILE; do
+  xsv select user_id $SOURCE_FILE | xsv behead | sort -u > $SOURCE_FILE.unique_userids
+done
+cat english_1000+_friends_chunk2_after_230209_part_?.csv.unique_userids english_1000+_friends_chunk2_after_230209_part_??.csv.unique_userids | sort -u > english_1000+_friends_chunk2_after_230209_parts.csv.unique_userids
+
+xsv cat rows english_1000+_friends_chunk2_after_230209_part*_results.csv > english_1000+_friends_chunk2_after_230209_results.csv
+gzip *results.csv
+ls english_1000+_friends_chunk2_after_230209_part_*results.csv.gz | while read RESULT_FILE; do
+  zcat $RESULT_FILE | xsv select friend_id | xsv behead | sort -u > $RESULT_FILE.unique_userids
+done
+cat english_1000+_friends_chunk2_after_230209_part_*results.csv.gz.unique_userids | sort -u > english_1000+_friends_chunk2_after_230209_parts_results.csv.gz.unique_userids
+
+echo "user_id" > ../english_chunk2_1000+_unique_userids.csv
+cat english_1000+_friends_chunk2_after_230209_parts.csv.unique_userids english_1000+_friends_chunk2_after_230209_parts_results.csv.gz.unique_userids | sort -u >> ../english_chunk2_1000+_unique_userids.csv
+gzip ../english_chunk2_1000+_unique_userids.csv
+
+rm -f *.unique_userids
+cd ../..
+
 
 # ENGLISH CHUNK 2-1 999-
 
