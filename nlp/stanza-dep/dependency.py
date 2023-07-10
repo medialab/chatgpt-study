@@ -146,10 +146,12 @@ def main():
             # Process the cleaned text with the Stanza pipeline
             doc = stanza_pipeline(text)
 
-            # Write a new line in the enriched CSV for every sentence in the tweet text
-            for n, sent in enumerate(doc.sentences):
-                addendum = parse_sentence(sent=sent, tweet_id=row[id_pos], n=n)
-                enricher.writerow(row, addendum)
+            pprint(doc)
+
+            # # Write a new line in the enriched CSV for every sentence in the tweet text
+            # for n, sent in enumerate(doc.sentences):
+            #     addendum = parse_sentence(sent=sent, tweet_id=row[id_pos], n=n)
+            #     enricher.writerow(row, addendum)
 
 
 if __name__ == "__main__":
