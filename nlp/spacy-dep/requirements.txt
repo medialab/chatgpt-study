@@ -1,0 +1,2 @@
+Merging the collections based on language and filtering out the retweets was done in R ('cleaning_non_rt.R').
+The resulting datasets of tweets, in English, French, and German were then fed to the parsing script ('en_fr_de_dep_parsing.ipynb'). This script produced datasets with 1 token per row.
