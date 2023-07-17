@@ -175,6 +175,12 @@ minet twitter users user_id --rcfile v1_key_rawbin.yml --ids -s '' -i english_ch
 minet twitter users user_id --rcfile v1_key_valentine.yml --ids -s '' -i english_chunk1_before_230209_unique_userids_part_11.csv --total $(xsv count english_chunk1_before_230209_unique_userids_part_11.csv) -o english_chunk1_before_230209_unique_userids_part_11_bios.csv
 
 
-## English chunk 2 (with 11 v1 keys)
+## English chunk 2 (with 6 v1 keys)
 
+minet twitter users user_id --rcfile v1_key_fautarreter.yml --ids -s '' -i english_chunk2_after_230209_unique_userids_part_1.csv --total $(xsv count english_chunk2_after_230209_unique_userids_part_1.csv) -o english_chunk2_after230209_unique_userids_part_1_bios.csv
+minet twitter users user_id --rcfile v1_key_jaikishan.yml --ids -s '' -i english_chunk2_after_230209_unique_userids_part_2.csv --total $(xsv count english_chunk2_after_230209_unique_userids_part_2.csv) -o english_chunk2_after230209_unique_userids_part_2_bios.csv
+minet twitter users user_id --rcfile v1_key_kotras.yml --ids -s '' -i english_chunk2_after_230209_unique_userids_part_3.csv --total $(xsv count english_chunk2_after_230209_unique_userids_part_3.csv) -o english_chunk2_after230209_unique_userids_part_3_bios.csv
+minet twitter users user_id --rcfile v1_key_paulanomalie.yml --ids -s '' -i english_chunk2_after_230209_unique_userids_part_4.csv --total $(xsv count english_chunk2_after_230209_unique_userids_part_4.csv) -o english_chunk2_after230209_unique_userids_part_4_bios.csv
+minet twitter users user_id --rcfile v1_key_alberto.yml --ids -s '' -i english_chunk2_after_230209_unique_userids_part_5.csv --total $(xsv count english_chunk2_after_230209_unique_userids_part_5.csv) -o english_chunk2_after230209_unique_userids_part_5_bios.csv
+minet twitter users user_id --rcfile v1_key_pspj.yml --ids -s '' -i english_chunk2_after_230209_unique_userids_part_6.csv --total $(xsv count english_chunk2_after_230209_unique_userids_part_6.csv) -o english_chunk2_after230209_unique_userids_part_6_bios.csv
 
