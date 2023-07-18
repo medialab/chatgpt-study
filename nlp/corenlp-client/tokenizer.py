@@ -57,8 +57,10 @@ def pipeline_manager(text: str, pipeline: Pipeline) -> dict:
         sentences.update(
             {
                 sent_id: {
-                    "tokens": tokens,
-                    "dependencies": depedencies,
+                    "stanza_layer": {
+                        "tokens": tokens,
+                        "dependencies": depedencies,
+                    }
                 }
             }
         )
@@ -67,18 +69,22 @@ def pipeline_manager(text: str, pipeline: Pipeline) -> dict:
     return {"text_tokenized": tokenized_text, "sentences": sentences}
 
 
-def stanza_annotations(datafile):
+def stanza_annotations(collection_name, datafile):
     # Set up the stanza pipeline
     stanza.download(LANG)
     nlp = stanza.Pipeline(lang=LANG, processors=PROCESSORS, use_gpu=True)
 
     # Set up the database connection
-    collection = database_connection(
-        collection_name="tweets-english-original", drop=True
-    )
+    collection = database_connection(collection_name=collection_name, drop=True)
 
     # Insert enriched data into document database
     for data in yield_data(datafile=datafile):
         metadata = pipeline_manager(text=data["text"], pipeline=nlp)
         data.update(metadata)
         collection.insert_one(data)
+
+    print(
+        "inserted {} documents".format(
+            collection.count_documents(filter={"id": {"$regex": ".*"}})
+        )
+    )

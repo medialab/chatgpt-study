@@ -1,10 +1,11 @@
-import casanova  # pip install casanova
 import csv
 import json
-import pymongo  # pip install pymongo
-from tqdm import tqdm
-from pymongo.collection import Collection
 from typing import Generator
+
+import casanova  # pip install casanova
+import pymongo  # pip install pymongo
+from pymongo.collection import Collection
+from tqdm import tqdm
 
 CONFIG = "config.json"
 
