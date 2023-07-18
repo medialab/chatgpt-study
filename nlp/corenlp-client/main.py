@@ -5,7 +5,7 @@ from corefs import corenlp_annotations
 
 
 @click.group()
-@click.argument("collection")
+@click.option("--collection", required=True, help="collection name in database")
 @click.pass_context
 def cli(ctx, collection):
     ctx.ensure_object(dict)
