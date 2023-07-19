@@ -5,11 +5,11 @@ from corefs import corenlp_annotations
 
 
 @click.group()
-@click.option("--collection", required=True, help="collection name in database")
+@click.option("--collection-name", required=True, help="collection name in database")
 @click.pass_context
-def cli(ctx, collection):
+def cli(ctx, collection_name):
     ctx.ensure_object(dict)
-    ctx.obj["collection"] = collection
+    ctx.obj["collection"] = collection_name
 
 
 @cli.command("stanza")
