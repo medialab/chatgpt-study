@@ -1,6 +1,10 @@
-from opensearchpy import OpenSearch
-from datetime import datetime
+import json
 import random
+from datetime import datetime
+
+from opensearchpy import OpenSearch
+
+from utils import scroll_index
 
 host = "localhost"
 port = 9200
@@ -36,6 +40,17 @@ def main():
                 "time": datetime.utcnow(),
             },
         )
+
+    # Pull all documents from the index
+    output = []
+    for _, entry in scroll_index(client=client, index=index_name):
+        output.append(entry)
+
+    print(
+        f"Writing {len(output)} documents from index '{index_name}' to 'export.json' file."
+    )
+    with open("export.json", "w") as of:
+        json.dump(output, of, indent=4)
 
 
 if __name__ == "__main__":
