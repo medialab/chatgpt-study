@@ -45,7 +45,7 @@ def annotate_all(ctx, datafile, lang, keep_index):
     db_client = create_client(authentication=("admin", "admin"))
 
     # (Re)create the index
-    if not keep_index:
+    if not keep_index and db_client.indices.exists(index=index_name):
         db_client.indices.delete(index=index_name)
     if not db_client.indices.exists(index=index_name):
         index_body = {"settings": {"index": {"number_of_shards": 4}}}
