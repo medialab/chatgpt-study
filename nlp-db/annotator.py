@@ -5,7 +5,7 @@ from typing import Generator
 import stanza
 from stanza.models.common.doc import Sentence
 from stanza.pipeline.core import Pipeline
-from stanza.server import CoreNLPClient
+from stanza.server import CoreNLPClient, StartServer
 
 from utils import make_token_id
 
@@ -37,6 +37,8 @@ def corenlp_client(*args, **kwargs):
             memory="4G",
             endpoint="http://localhost:9001",
             be_quiet=True,
+            preload=True,
+            start_server=StartServer.TRY_START,
         )
     except FileNotFoundError:
         stanza.install_corenlp()
@@ -45,6 +47,8 @@ def corenlp_client(*args, **kwargs):
             memory="4G",
             endpoint="http://localhost:9001",
             be_quiet=True,
+            preload=True,
+            start_server=StartServer.TRY_START,
         )
 
 
@@ -150,6 +154,7 @@ def corenlp_annotation(client: CoreNLPClient, document: dict) -> dict:
 
     openie_triples = []
     entity_mentions = []
+    nested_corefs = []
     for n, sent in enumerate(sentences):
         openies = sent["openie"]
         for openie in openies:
@@ -161,9 +166,24 @@ def corenlp_annotation(client: CoreNLPClient, document: dict) -> dict:
             mention.update({"sentence": n + 1})
             entity_mentions.append(mention)
 
+    for coref_id, coref_list in corefs.items():
+        updated_coref_list = []
+        for coref in coref_list:
+            coref.update({"coref_id": coref_id})
+            updated_coref_list.append(coref)
+
+        nested_corefs.append(updated_coref_list)
+
+    if len(nested_corefs) == 0:
+        nested_corefs = [{}]
+    if len(openie_triples) == 0:
+        openie_triples = [{}]
+    if len(entity_mentions) == 0:
+        entity_mentions = [{}]
+
     document.update(
         {
-            "corefs": corefs,
+            "corefs": nested_corefs,
             "openieTriples": openie_triples,
             "entityMentions": entity_mentions,
         }

@@ -1,9 +1,16 @@
+import json
+import logging
+import os
+from datetime import datetime
+
 import click
 import stanza
-import json
 
 from annotator import STANZA_PROCESSORS, annotate, corenlp_client
-from utils import create_client, yield_data, scroll_index
+from utils import create_client, scroll_index, yield_data
+
+log_filename = "screen_{}_{}.log".format(os.getenv("STY"), datetime.utcnow())
+logging.basicConfig(filename=log_filename, encoding="utf-8", level=logging.ERROR)
 
 
 @click.group()
@@ -34,10 +41,11 @@ def export(ctx):
 
 @cli.command("annotate")
 @click.option("--datafile", required=True)
+@click.option("--reverse", is_flag=True, show_default=True, default=False)
 @click.option("--lang", required=False, default="en")
 @click.option("--keep-index", is_flag=True, show_default=True, default=False)
 @click.pass_context
-def annotate_all(ctx, datafile, lang, keep_index):
+def annotate_all(ctx, datafile, reverse, lang, keep_index):
     # Get index name
     index_name = ctx.obj["index"]
 
@@ -61,7 +69,7 @@ def annotate_all(ctx, datafile, lang, keep_index):
         )
 
         # Annotate the Tweets and insert in the database
-        for data in yield_data(datafile=datafile):
+        for data in yield_data(datafile=datafile, reverse=reverse):
             # Determine if the Tweet is already in the database
             doc_id = data["id"]
             response = db_client.search(
@@ -78,7 +86,12 @@ def annotate_all(ctx, datafile, lang, keep_index):
 
                 data.update(annotation_layer)
 
-                db_client.index(index=index_name, body=data, id=doc_id, refresh=True)
+                try:
+                    db_client.index(
+                        index=index_name, body=data, id=doc_id, refresh=True
+                    )
+                except Exception as e:
+                    logging.error(e)
 
 
 if __name__ == "__main__":

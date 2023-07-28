@@ -1,23 +1,15 @@
-import csv
-import json
 from typing import Generator
-import casanova
 
+import casanova
 from opensearchpy import OpenSearch
 from tqdm import tqdm
 
-CONFIG = "config.json"
-
-host = "localhost"
-port = 9200
-auth = ("admin", "admin")  # For testing only. Don't store credentials in code.
-
-INDEX_BODY = {"settings": {"index": {"number_of_shards": 4}}}
+from constants import HOST, INDEX_BODY, PORT
 
 
 def create_client(authentication: tuple) -> OpenSearch:
     client = OpenSearch(
-        hosts=[{"host": host, "port": port}],
+        hosts=[{"host": HOST, "port": PORT}],
         http_compress=True,  # enables gzip compression for request bodies
         http_auth=authentication,
         use_ssl=True,
@@ -34,23 +26,29 @@ def create_client(authentication: tuple) -> OpenSearch:
 
 def create_index(client: OpenSearch, index_name: str):
     # Create an index with non-default settings.
-    index_body = {"settings": {"index": {"number_of_shards": 4}}}
-    response = client.indices.create(index_name, body=index_body)
+    response = client.indices.create(index_name, body=INDEX_BODY)
     print("\nCreating index:")
     print(response)
 
 
-def yield_data(datafile: str) -> Generator[dict, None, None]:
+def yield_data(datafile: str, reverse: bool = False) -> Generator[dict, None, None]:
     print("\nCounting data file length...")
     total = casanova.reader.count(datafile)
     with open(datafile, "r") as f:
-        reader = csv.DictReader(f)
-        for row in tqdm(
-            reader,
-            total=total,
-            desc="Processing documents...",
-        ):
-            yield row
+        if reverse:
+            reader = casanova.reverse_reader(f)
+        else:
+            reader = casanova.reader(f)
+        fieldnames = reader.fieldnames
+        print("\nProcessing documents...")
+        if isinstance(fieldnames, list):
+            for row in tqdm(
+                reader,
+                total=total,
+            ):
+                yield {k: v for k, v in list(zip(fieldnames, row))}
+        else:
+            raise TypeError
 
 
 def make_token_id(sent_id: int | str, token_id: int | str):
