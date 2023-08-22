@@ -1,0 +1,26 @@
+casanova==1.15.1
+certifi==2023.7.22
+charset-normalizer==3.2.0
+click==8.1.5
+ebbe==1.13.2
+emoji==2.8.0
+file-read-backwards==2.0.0
+filelock==3.12.2
+idna==3.4
+Jinja2==3.1.2
+MarkupSafe==2.1.3
+mpmath==1.3.0
+networkx==3.1
+numpy==1.25.2
+opensearch-py==2.2.0
+protobuf==3.19.0
+pythainlp==4.0.2
+python-dateutil==2.8.2
+requests==2.31.0
+six==1.16.0
+-e git+https://github.com/mit-ccc/TweebankNLP.git@a205b8bb879386b0676f2ce7a15481f9519c9ac1#egg=stanza&subdirectory=twitter-stanza
+sympy==1.12
+torch==2.0.1
+tqdm==4.66.1
+typing_extensions==4.7.1
+urllib3==1.26.16
