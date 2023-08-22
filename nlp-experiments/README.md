@@ -10,27 +10,12 @@
 
 ## Set up
 
-### Install MongoDB
+### Install [old version](https://www.mongodb.com/download-center/community/releases/archive) of MongoDB (=< 4.0.3)
 
 MacOS
 
 ```shell
-brew tap mongodb/brew
-brew update
-brew install mongodb-community@6.0
-```
-
-### Install annotation tool
-
-```shell
-pip install --upgrade pip setuptools wheel
-pip install -r requirements.txt
-```
-
-### Start local MongoDB server
-
-```shell
-brew services start mongodb/brew/mongodb-community
+$ curl -O https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-4.0.3.tgz
 ```
 
 ---
