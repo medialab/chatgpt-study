@@ -65,10 +65,23 @@ class TwitterStanzaAnnotator:
 
 
 if __name__ == "__main__":
-    import casanova
     import argparse
-    from tqdm import tqdm
+    import gzip
+    from contextlib import contextmanager
+
+    import casanova
     from stanza.utils.conll import CoNLL
+    from tqdm import tqdm
+
+    # Try reading gzipped file
+    @contextmanager
+    def open_infile(infile):
+        if infile.endswith(".gz"):
+            with gzip.open(infile, "rt") as f:
+                yield f
+        else:
+            with open(infile, "r") as f:
+                yield f
 
     parser = argparse.ArgumentParser()
     parser.add_argument("infile")
@@ -80,7 +93,7 @@ if __name__ == "__main__":
 
     nlp = TwitterStanzaAnnotator()
 
-    with open(args.infile, "r") as f, open(args.outfile, "w") as of:
+    with open_infile(args.infile) as f, open(args.outfile, "w") as of:
         enricher = casanova.enricher(input_file=f, output_file=of, add=["conll_string"])
         for row, text in tqdm(
             enricher.cells("text", with_rows=True), total=file_length
