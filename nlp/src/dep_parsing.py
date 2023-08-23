@@ -18,19 +18,20 @@ depparse_model_path = MODEL_PATH.joinpath("depparse/en_tweet_parser.pt")
 ner_model_path = MODEL_PATH.joinpath("ner/en_tweet_nertagger.pt")
 
 TWITTER_STANZA_CONFIG = {
-    "processors": "tokenize,lemma,pos,depparse,ner",
+    "processors": "tokenize,lemma,pos,depparse",
     "lang": "en",
     "tokenize_pretokenized": False,  # disable tokenization
     "tokenize_model_path": str(tokenize_model_path.absolute()),
     "lemma_model_path": str(lemma_model_path.absolute()),
     "pos_model_path": str(pos_model_path.absolute()),
     "depparse_model_path": str(depparse_model_path.absolute()),
-    "ner_model_path": str(ner_model_path.absolute()),
+    # "ner_model_path": str(ner_model_path.absolute()),
 }
 
 
 @dataclass
 class AnnotationLayer:
+    doc_object: Document = Document(sentences=[])
     sentences: list = field(default_factory=list)
     dependencies: list = field(default_factory=list)
 
@@ -53,10 +54,40 @@ class TwitterStanzaAnnotator:
     def parse(self, text) -> Document:
         return self.nlp(text)  # type: ignore
 
-    def __call__(self, text: str) -> dict:
+    def __call__(self, text: str) -> AnnotationLayer:
         annotation = AnnotationLayer()
         doc = self.parse(text)
+        annotation.doc_object = doc
         annotation.sentences = doc.to_dict()
         annotation.dependencies = [sent.dependencies for sent in doc.sentences]
 
-        return annotation.asdict()
+        return annotation
+
+
+if __name__ == "__main__":
+    import casanova
+    import argparse
+    from tqdm import tqdm
+    from stanza.utils.conll import CoNLL
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("infile")
+    parser.add_argument("outfile")
+    args = parser.parse_args()
+
+    print("Counting file length...")
+    file_length = casanova.reader.count(args.infile)
+
+    nlp = TwitterStanzaAnnotator()
+
+    with open(args.infile, "r") as f, open(args.outfile, "w") as of:
+        enricher = casanova.enricher(input_file=f, output_file=of, add=["conll_string"])
+        for row, text in tqdm(
+            enricher.cells("text", with_rows=True), total=file_length
+        ):
+            ann = nlp(text=text)
+            doc = ann.doc_object
+
+            # Convert the Document object into a string (format CoNLL)
+            conllu_string = CoNLL.doc2conll_text(doc)
+            enricher.writerow(row, [conllu_string])

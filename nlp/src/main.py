@@ -5,7 +5,7 @@ from pathlib import Path
 from datetime import datetime
 import os
 
-from src import TwitterStanzaAnnotator
+from src.dep_parsing import TwitterStanzaAnnotator
 from src.constants import TWEET_STANZA_MAPPINGS
 from src.utils import (
     create_client,
@@ -66,7 +66,7 @@ def dep_parsing(ctx, datafile, reverse, reset_index):
             if not result:
                 # Annotate the Tweet's text
                 annotation = twitter_stanza_pipeline(tweet_text)
-                data.update(annotation)
+                data.update(annotation.asdict())
 
                 # Try inserting the annotated Tweet into the index
                 try:
