@@ -25,7 +25,11 @@ class TestTwitterStanza(unittest.TestCase):
 
         outfile = DIR + "/conllu.csv"
         infile = DIR + "/data.csv"
-        infile_length = casanova.reader.count(infile)
+        try:
+            infile_length = casanova.reader.count(infile)
+        except Exception:
+            infile = DIR + "/data.csv.gz"
+            infile_length = casanova.reader.count(infile)
         with open(infile) as f, open(outfile, "w") as of:
             enricher = casanova.enricher(f, of, add=["conllu_string"])
             for row, text in tqdm(
